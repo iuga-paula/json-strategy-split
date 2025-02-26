@@ -46,10 +46,14 @@ def split_json(path):
         else:
             country_data[country_code].append(strategy_data)
 
-    for key in country_data:
-        with open(f"./data/{key}.json", "w") as small_json:
-            json.dump(country_data[key], small_json, ensure_ascii=False, indent=4, separators=(",", ": "))
+        with open(f"./data/{country_code}.json", "w") as small_json:
+            json.dump(strategy_data, small_json, ensure_ascii=False, indent=4, separators=(",", ": "))  # Prevent line
+            # breaks in strings
             small_json.close()
+
+    for key in country_data:
+        if len(country_data[key]) > 1:
+            print(f"there are many strategies for {key}!")
 
 
 def main():
