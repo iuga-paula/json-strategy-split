@@ -24,6 +24,7 @@ countries_with_codes = {
 
 
 def split_json(path):
+    country_data = {}
     with open(path, 'r') as file:
         data = json.load(file)
 
@@ -40,10 +41,15 @@ def split_json(path):
                 print(f"strategy {strategy_data['id']} has different country for and older version")
 
         country_code = countries_with_codes[country]
-        small_json = open(f"./data/{country_code}.json", "a")
-        json.dump(strategy_data, small_json, ensure_ascii=False, indent=4, separators=(",", ": "))  # Prevent line
-        # breaks in strings
-        small_json.close()
+        if country_code not in country_data:
+            country_data[country_code] = [strategy_data]
+        else:
+            country_data[country_code].append(strategy_data)
+
+    for key in country_data:
+        with open(f"./data/{key}.json", "w") as small_json:
+            json.dump(country_data[key], small_json, ensure_ascii=False, indent=4, separators=(",", ": "))
+            small_json.close()
 
 
 def main():
